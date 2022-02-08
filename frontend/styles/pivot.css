@@ -1,0 +1,44 @@
+.pivot-configuration-panel {
+    border: 1px solid #d8d8d8;
+}
+
+.pivot-configuration-panel .pivot-panel-caption {
+    padding: 0 12px 0 17px;
+}
+
+.pivot-configuration-panel > *:not(:last-child) {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.pivot-configuration-panel .pivot-group-by {
+    padding: 22px 12px 17px 17px;
+}
+.pivot-configuration-panel .pivot-group-by > span {
+    margin-bottom: 11px;
+    font-weight: bold;
+}
+.pivot-configuration-panel .pivot-group-by .pivot-config-item {
+    margin-bottom: 4px;
+}
+.pivot-configuration-panel .pivot-group-by .pivot-config-item:last-child {
+    margin-bottom: 11px;
+}
+
+.pivot-configuration-panel .pivot-config-item {
+    background: #f3f5f7;
+    border: 1px solid #e0e1e3;
+    box-shadow: 0 1px rgba(0,0,0,0.05);
+    padding: 6px 8px 6px 6px;
+}
+
+.pivot-configuration-panel .pivot-panel-caption span {
+    font-weight: bold;
+}
+
+iron-icon.pivot-icon-button {
+    cursor: pointer;
+    color: #79797a;
+}
+iron-icon.pivot-icon-button.drag-handle {
+    cursor: grab;
+}
