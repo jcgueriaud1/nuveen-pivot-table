@@ -192,21 +192,11 @@ public class PlayerTreePivotExternalFilterView extends VerticalLayout {
 			// Push the focus to the cell clicked
 			// It will get the focus, but un-fortunately focus ring will not show up
 			// If you continue the navigation with cursor keys, the focus ring will appear
-			// See https://github.com/vaadin-component-factory/selection-grid-flow/blob/main/selection-grid-flow/src/main/resources/META-INF/resources/frontend/src/vcf-selection-grid.js#L81
 			// there is an issue with the column focus after mixing keyboard and mouse click: https://github.com/vaadin/web-components/issues/2134
-			// JCG the previous code is throwing an exception and does nothing
-/*			pivotTable.getElement().executeJs(
-					"window.requestAnimationFrame(function(){ const row = Array.from($0.$.items.children).filter(\n" +
-							"            (child) => child.index === $1\n" +
-							"        )[0];\n" +
-							"        // if row is already\n" +
-							"        if (row) {\n" +
-							"            const cell = row.children[$2];\n" +
-							"            if (cell) {\n" +
-							"                cell.focus();\n" +
-							"            }" +
-							"        }})",
-					pivotTable.getElement(), row, col );*/
+
+			pivotTable.getElement().executeJs(
+					"delete $0._focusedColumnOrder;",
+					pivotTable.getElement());
 			Notification.show("Cell (" + (row + 1) + "," + (col + 1) + ") clicked. Cell value is " + value);
 
 		});
