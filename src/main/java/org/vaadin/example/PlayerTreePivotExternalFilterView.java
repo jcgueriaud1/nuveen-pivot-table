@@ -14,6 +14,7 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.treegrid.TreeGrid;
+import com.vaadin.flow.data.provider.hierarchy.HierarchicalDataCommunicator;
 import com.vaadin.flow.data.provider.hierarchy.TreeData;
 import com.vaadin.flow.router.Route;
 import org.jetbrains.annotations.NotNull;
@@ -183,17 +184,31 @@ public class PlayerTreePivotExternalFilterView extends VerticalLayout {
 
 		pivotTable.addItemClickListener(event -> {
 			String key = event.getColumn().getKey();
-			int col = pivotTable.getColumns().indexOf(pivotTable.getColumnByKey(key)) + 1;
+			int col = pivotTable.getColumns().indexOf(pivotTable.getColumnByKey(key));
 			Object value = event.getItem().get(key);
-			int row = pivotResult.rows.indexOf(event.getItem()) + 1;
+			//int row = pivotResult.rows.indexOf(event.getItem());
+			HierarchicalDataCommunicator<Row<T>> dataCommunicator = pivotTable.getDataCommunicator();
+			int row =  dataCommunicator.getIndex(event.getItem());
 			// Push the focus to the cell clicked
 			// It will get the focus, but un-fortunately focus ring will not show up
 			// If you continue the navigation with cursor keys, the focus ring will appear
-			pivotTable.getElement().executeJs(
-					"window.requestAnimationFrame(function(){let firstTd = $0.shadowRoot.querySelector('tr:nth-child(" + row
-							+ ") > td:nth-child(" + col + ")'); firstTd.focus(); })",
-					pivotTable.getElement());
-			Notification.show("Cell (" + row + "," + col + ") clicked. Cell value is " + value);
+			// See https://github.com/vaadin-component-factory/selection-grid-flow/blob/main/selection-grid-flow/src/main/resources/META-INF/resources/frontend/src/vcf-selection-grid.js#L81
+			// there is an issue with the column focus after mixing keyboard and mouse click: https://github.com/vaadin/web-components/issues/2134
+			// JCG the previous code is throwing an exception and does nothing
+/*			pivotTable.getElement().executeJs(
+					"window.requestAnimationFrame(function(){ const row = Array.from($0.$.items.children).filter(\n" +
+							"            (child) => child.index === $1\n" +
+							"        )[0];\n" +
+							"        // if row is already\n" +
+							"        if (row) {\n" +
+							"            const cell = row.children[$2];\n" +
+							"            if (cell) {\n" +
+							"                cell.focus();\n" +
+							"            }" +
+							"        }})",
+					pivotTable.getElement(), row, col );*/
+			Notification.show("Cell (" + (row + 1) + "," + (col + 1) + ") clicked. Cell value is " + value);
+
 		});
 		return pivotTable;
 	}
