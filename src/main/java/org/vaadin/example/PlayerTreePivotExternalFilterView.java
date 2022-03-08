@@ -190,7 +190,7 @@ public class PlayerTreePivotExternalFilterView extends VerticalLayout {
 			// It will get the focus, but un-fortunately focus ring will not show up
 			// If you continue the navigation with cursor keys, the focus ring will appear
 			pivotTable.getElement().executeJs(
-					"window.requestAnimationFrame(function(){let firstTd = $0.shadowRoot.querySelector('tr:nth-child(" + row 
+					"window.requestAnimationFrame(function(){let firstTd = $0.shadowRoot.querySelector('tr:nth-child(" + row
 							+ ") > td:nth-child(" + col + ")'); firstTd.focus(); })",
 					pivotTable.getElement());
 			Notification.show("Cell (" + row + "," + col + ") clicked. Cell value is " + value);
@@ -249,7 +249,7 @@ public class PlayerTreePivotExternalFilterView extends VerticalLayout {
 
 
 	private static <T> void updateExternalFilters(HasComponents filterComponent, @NotNull PivotConfigurationPanel<T> panel,
-												  @NotNull List<T> items, Grid<Row<T>> pivotTable,
+												  @NotNull List<T> items, TreeGrid<Row<T>> pivotTable,
 												  PivotDataSource.PivotResult<T> pivotResult) {
 		filterComponent.removeAll();
 		for (String columnId : pivotResult.getColumnIds()) {
@@ -284,7 +284,8 @@ public class PlayerTreePivotExternalFilterView extends VerticalLayout {
 						panel.setFilterValue(pivotColumn, event.getValue());
 
 						PivotDataSource.PivotResult<T> filteredPivotResult = panel.computePivotData(items);
-						pivotTable.setItems(filteredPivotResult.rows);
+						TreeData<Row<T>> data = buildTreeData(filteredPivotResult);
+						pivotTable.setTreeData(data);
 
 						updateExternalFilters(filterComponent, panel, items, pivotTable, filteredPivotResult);
 						updateGrandTotalFooter(pivotTable, filteredPivotResult);
