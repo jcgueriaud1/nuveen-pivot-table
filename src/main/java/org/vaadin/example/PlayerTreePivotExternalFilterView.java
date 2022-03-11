@@ -198,9 +198,21 @@ public class PlayerTreePivotExternalFilterView extends VerticalLayout {
 					"delete $0._focusedColumnOrder;",
 					pivotTable.getElement());
 			Notification.show("Cell (" + (row + 1) + "," + (col + 1) + ") clicked. Cell value is " + value);
+			Notification.show("Item is " + event.getItem());
+			Notification.show("Parents are " + getAncestors(pivotTable, event.getItem()));
 
 		});
 		return pivotTable;
+	}
+
+	private static <T> List<Row<T>> getAncestors(TreeGrid<Row<T>> grid, Row<T> item) {
+		ArrayList<Row<T>> ancestors = new ArrayList<>();
+		Row<T> parent = grid.getTreeData().getParent(item);
+		if (parent != null) {
+			ancestors.add(parent);
+			ancestors.addAll(getAncestors(grid, parent));
+		}
+		return ancestors;
 	}
 
 	private static <T> void addChildren(PivotDataSource.PivotResult<T> pivotResult, TreeData<Row<T>> rowTreeData, int colIndex, List<Row<T>> children, Row<T> grandparent) {
