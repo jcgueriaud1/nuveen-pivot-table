@@ -73,6 +73,11 @@ public interface PivotDataSource<T> extends Serializable {
         public String toString() {
             return "Row{" + values + '}';
         }
+
+        @NotNull
+        public Map<String, Object> getValues() {
+            return values;
+        }
     }
 
     /**

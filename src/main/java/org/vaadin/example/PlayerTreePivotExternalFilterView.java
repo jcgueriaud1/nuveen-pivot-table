@@ -198,8 +198,18 @@ public class PlayerTreePivotExternalFilterView extends VerticalLayout {
 					"delete $0._focusedColumnOrder;",
 					pivotTable.getElement());
 			Notification.show("Cell (" + (row + 1) + "," + (col + 1) + ") clicked. Cell value is " + value);
-			Notification.show("Item is " + event.getItem());
-			Notification.show("Parents are " + getAncestors(pivotTable, event.getItem()));
+			String rowAsText = "Item is " + pivotResult.columns.stream().map(column -> {
+				Map<String, Object> values = event.getItem().getValues();
+				if (values.containsKey(column.id)) {
+					if (column.columnGroupValue == null) {
+						return  column.getCaption() + " = " + values.get(column.id);
+					} else {
+						return  column.columnGroupValue + "["+column.getCaption() + "] = " + values.get(column.id);
+					}
+				}
+				return null;
+			}).filter(Objects::nonNull).collect(Collectors.joining(","));
+			Notification.show(rowAsText); // Exception Type = Taxable Fixed Income Tolerance , State = PA , Research Analyst = WALTOS and we need a generic solution for any level of grouping
 
 		});
 		return pivotTable;
@@ -227,11 +237,17 @@ public class PlayerTreePivotExternalFilterView extends VerticalLayout {
 				if (colIndex + 1 == count) {
 					for (Row<T> row : value) {
 						row.put(ROWGROUP_KEY, row.get(col));
+						row.put(col.id, row.get(col));
 						rowTreeData.addItem(grandparent, row);
 					}
 				} else {
+					// copy the parent data to the child
 					HashMap<String, Object> values = new HashMap<>();
+					if (grandparent != null) {
+						values.putAll(grandparent.getValues());
+					}
 					values.put(ROWGROUP_KEY, value.get(0).get(col));
+					values.put(col.id, value.get(0).get(col));
 					// calculate Aggregates
 					pivotResult.columns.stream().filter(c -> c.isAggregate()).forEach( aggregateColumn -> {
 						// aggregateColumn.aggregate.computeAggregatedValue(value.stream().flatMap(x -> x.getSourceBeans().stream()).collect(Collectors.toList()));
