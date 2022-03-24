@@ -222,6 +222,8 @@ public interface PivotDataSource<T> extends Serializable {
         @NotNull
         public final List<Row<T>> rows;
 
+        private GroupBy<T> topGroup;
+
         /**
          * Lists all columns.
          * Follows the order of <code>groupBy</code> and <code>aggregate</code> parameters
@@ -287,6 +289,14 @@ public interface PivotDataSource<T> extends Serializable {
          */
         public boolean hasEnabledFilters() {
             return columns.stream().anyMatch(PivotColumn::isFilterEnabled);
+        }
+
+        public GroupBy<T> getTopGroup() {
+            return topGroup;
+        }
+
+        public void setTopGroup(GroupBy<T> topGroup) {
+            this.topGroup = topGroup;
         }
     }
 

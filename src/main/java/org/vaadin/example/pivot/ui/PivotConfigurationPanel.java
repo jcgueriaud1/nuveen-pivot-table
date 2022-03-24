@@ -227,6 +227,7 @@ public class PivotConfigurationPanel<T> extends Composite<Div> {
         final Set<String> grandTotalsSet = aggregateSet.stream().map(it -> it.id).collect(Collectors.toSet());
 
         final PivotDataSource.PivotResult<T> result = pivot.computePivotRows(groupBySet, aggregateSet, grandTotalsSet, items, filter);
+        result.setTopGroup(getTopGroup());
         return result;
     }
 

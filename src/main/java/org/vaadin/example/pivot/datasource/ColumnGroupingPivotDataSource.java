@@ -124,7 +124,7 @@ public class ColumnGroupingPivotDataSource<T> implements PivotDataSource<T> {
             // the "collapsed" row holding horizontally grouped values.
             final Map<String, Object> newRow = new HashMap<>();
             // maps foldId to the list of values in the horizontally grouped row, so that we can compute grand totals.
-            final Map<String, List<Object>> grandTotalsColumn = hasGrandTotalColumn() ? new HashMap<>() : null;
+            final Map<String, List<T>> grandTotalsColumn = hasGrandTotalColumn() ? new HashMap<>() : null;
 
             // these values are the same for all rows present in the 'uncollapsed'
             for (String groupById : groupByIds) {
@@ -139,16 +139,21 @@ public class ColumnGroupingPivotDataSource<T> implements PivotDataSource<T> {
                     newRow.put(getId(columnGroupValue, aggregateId), value);
 
                     if (hasGrandTotalColumn()) {
-                        grandTotalsColumn.computeIfAbsent(aggregateId, it -> new LinkedList<>()).add(value);
+                        // get the Grand Total data
+                        // we need the unprocessed data to aggregate the data not each result (it will work for the sum but not for the count)
+                        List<T> sourceBeans = ungroupedRow.getSourceBeans();
+                        List<T> allSourceBeans = grandTotalsColumn.getOrDefault(aggregateId, new ArrayList<>());
+                        allSourceBeans.addAll(sourceBeans);
+                        grandTotalsColumn.put(aggregateId, allSourceBeans);
                     }
                 }
             }
 
             if (grandTotalsColumn != null) {
-                for (Map.Entry<String, List<Object>> entry : grandTotalsColumn.entrySet()) {
+                for (Map.Entry<String, List<T>> entry : grandTotalsColumn.entrySet()) {
                     final Aggregate<T> grandTotalAggregate = aggregateMap.get(entry.getKey());
                     if (grandTotalAggregate != null) {
-                        final Number grandTotal = grandTotalAggregate.function.compute(entry.getValue().stream());
+                        final Number grandTotal = grandTotalAggregate.computeAggregatedValue(entry.getValue());
                         newRow.put(grandTotalColumnCaption + "-" + entry.getKey(), grandTotal);
                     }
                 }

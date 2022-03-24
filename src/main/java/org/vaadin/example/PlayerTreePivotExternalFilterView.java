@@ -249,13 +249,24 @@ public class PlayerTreePivotExternalFilterView extends VerticalLayout {
 					values.put(ROWGROUP_KEY, value.get(0).get(col));
 					values.put(col.id, value.get(0).get(col));
 					// calculate Aggregates
+					// probably filter the data by the parent group ? rowgroup ?
 					pivotResult.columns.stream().filter(c -> c.isAggregate()).forEach( aggregateColumn -> {
-						// aggregateColumn.aggregate.computeAggregatedValue(value.stream().flatMap(x -> x.getSourceBeans().stream()).collect(Collectors.toList()));
-						values.put(aggregateColumn.id, aggregateColumn.aggregate.computeAggregatedValue(value.stream().flatMap(x -> x.getSourceBeans().stream()).collect(Collectors.toList())));/*aggregateColumn.aggregate
-								.computeAggregatedValue((Collection) value.stream().map(r -> r.get(aggregateColumn))
-										.collect(Collectors.toList())));*/
+								if (!aggregateColumn.id.startsWith("dynamic") || pivotResult.getTopGroup() == null) {
+									values.put(aggregateColumn.id, aggregateColumn.aggregate
+											.computeAggregatedValue(value.stream().flatMap(x -> x.getSourceBeans().stream())
+													.collect(Collectors.toList())));
+								} else {
+									// filter the data to have only the filtered data of the columnGroup
+									List<T> collect = value.stream().flatMap(x -> x.getSourceBeans().stream()
+													.filter(item -> Objects.equals(pivotResult.getTopGroup().property.valueProvider.apply(item), aggregateColumn.columnGroupValue)
+													))
+											.collect(toList());
+									if (!collect.isEmpty()) { // if no data don't add the aggregate
+										values.put(aggregateColumn.id, aggregateColumn.aggregate
+												.computeAggregatedValue(collect));
+									}
+								}
 							}
-
 					);
 					parent = new Row<>(values, null);
 					rowTreeData.addItem(grandparent, parent);
