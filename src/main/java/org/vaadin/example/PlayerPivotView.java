@@ -23,6 +23,7 @@ import org.vaadin.example.pivot.datasource.InMemoryPivot;
 import org.vaadin.example.pivot.datasource.PivotDataSource;
 import org.vaadin.example.pivot.datasource.PivotDataSource.Row;
 import org.vaadin.example.pivot.ui.PivotConfigurationPanel;
+import org.vaadin.gatanaso.MultiselectComboBox;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -176,7 +177,7 @@ public class PlayerPivotView extends VerticalLayout {
 		for (Grid.Column<PivotDataSource.Row<T>> column : pivotTable.getColumns()) {
 			PivotDataSource.PivotColumn<T> pivotColumn = pivotResult.getColumn(column.getKey());
 			if (pivotColumn.isFilterEnabled()) {
-				ComboBox<Object> filterField = new ComboBox<>(); // replace with select and a button?
+				MultiselectComboBox<Object> filterField = new MultiselectComboBox<>(); // replace with select and a button?
 				filterField.setClearButtonVisible(true);
 				filterField.setWidth("0");
 				filterField.setMinWidth("75px");

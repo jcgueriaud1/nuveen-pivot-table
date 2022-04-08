@@ -98,9 +98,10 @@ public class ColumnGroupingPivotDataSource<T> implements PivotDataSource<T> {
 
         // create a sub filter, ignoring all dynamic or grand total values to prevent false filtering for the aggregate columns
         PivotFilter tmpFilter = new PivotFilter();
-        Map<String, Object> map = filters.getFilterValues();
-        for (Map.Entry<String, Object> entry : map.entrySet()) {
+        Map<String, Set<Object>> map = filters.getFilterValues();
+        for (Map.Entry<String, Set<Object>> entry : map.entrySet()) {
             String key = entry.getKey();
+            //todo jcg filter
             if (!key.startsWith("dynamic-") && !key.startsWith("Grand Total-")) { // TODO extract "Grand Total" starter to a constant?
                 tmpFilter.getFilterValues().put(key, entry.getValue());
             }
@@ -160,12 +161,12 @@ public class ColumnGroupingPivotDataSource<T> implements PivotDataSource<T> {
             }
 
             Row<T> finalNewRow = new Row<>(newRow, flattenBeans(uncollapsed));
-            Map<String, Object> values = filters.getFilterValues();
+            Map<String, Set<Object>> values = filters.getFilterValues();
 
-            for (Map.Entry<String, Object> entry : values.entrySet()) {
+            for (Map.Entry<String, Set<Object>> entry : values.entrySet()) {
                 System.out.println("Test Objects.equals(" + entry.getValue() + "," + finalNewRow.get(entry.getKey()) + ": "
                         + (Objects.equals(entry.getValue(), finalNewRow.get(entry.getKey())) ? "allow" : "filter out"));
-                if (!Objects.equals(entry.getValue(), finalNewRow.get(entry.getKey()))) {
+                if (!entry.getValue().contains(finalNewRow.get(entry.getKey()))) {
                     continue buildFinalRows;
                 }
             }

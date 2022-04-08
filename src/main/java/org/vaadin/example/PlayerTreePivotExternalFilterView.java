@@ -21,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import org.vaadin.example.pivot.datasource.PivotDataSource;
 import org.vaadin.example.pivot.datasource.PivotDataSource.Row;
 import org.vaadin.example.pivot.ui.PivotConfigurationPanel;
+import org.vaadin.gatanaso.MultiselectComboBox;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -299,7 +300,7 @@ public class PlayerTreePivotExternalFilterView extends VerticalLayout {
 		for (String columnId : pivotResult.getColumnIds()) {
 			PivotDataSource.PivotColumn<T> pivotColumn = pivotResult.getColumn(columnId);
 			if (pivotColumn.isFilterEnabled()) {
-				ComboBox<Object> filterField = new ComboBox<>(); // replace with select and a button?
+				MultiselectComboBox<Object> filterField = new MultiselectComboBox<>(); // replace with select and a button?
 				filterField.setClearButtonVisible(true);
 				filterField.setWidthFull();
 				filterField.setMinWidth("75px");

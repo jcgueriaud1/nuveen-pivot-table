@@ -112,12 +112,12 @@ public class InMemoryPivot<T> implements PivotDataSource<T> {
         final List<Row<T>> pivotRows = pivotData.entrySet().stream()
                 .map(it -> computeRow(it.getKey(), it.getValue(), aggregates))
                 .filter(row -> {
-                    Set<Entry<String, Object>> filterValues = filter.getFilterValues().entrySet();
+                    Set<Entry<String, Set<Object>>> filterValues = filter.getFilterValues().entrySet();
 
-                    for (Entry<String, Object> filterValue : filterValues) {
+                    for (Entry<String, Set<Object>> filterValue : filterValues) {
                         String columnId = filterValue.getKey();
-                        Object value = filterValue.getValue();
-                        if (!Objects.equals(value, row.get(columnId))) {
+                        Set<Object> value = filterValue.getValue();
+                        if (!value.contains(row.get(columnId))) {
                             return false;
                         }
                     }

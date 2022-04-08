@@ -244,12 +244,12 @@ public class PivotConfigurationPanel<T> extends Composite<Div> {
         filter = new PivotFilter();
     }
 
-    public void setFilterValue(PivotColumn<?> column, Object value) {
+    public void setFilterValue(PivotColumn<?> column, Set<Object> value) {
         setFilterValue(column.id, value);
     }
 
-    public void setFilterValue(String columnId, Object value) {
-        Map<String, Object> filterValues = filter.getFilterValues();
+    public void setFilterValue(String columnId, Set<Object> value) {
+        Map<String, Set<Object>> filterValues = filter.getFilterValues();
 
         if (value != null) {
             filterValues.put(columnId, value);
@@ -263,15 +263,15 @@ public class PivotConfigurationPanel<T> extends Composite<Div> {
     }
 
     public void removeFilterValue(String columnId) {
-        Map<String, Object> filterValues = filter.getFilterValues();
+        Map<String, Set<Object>> filterValues = filter.getFilterValues();
         filterValues.remove(columnId);
     }
 
-    public Object getFilterValue(PivotColumn<?> column) {
+    public Set<Object> getFilterValue(PivotColumn<?> column) {
         return getFilterValue(column.id);
     }
 
-    public Object getFilterValue(String columndId) {
+    public Set<Object> getFilterValue(String columndId) {
         return filter.getFilterValues().get(columndId);
     }
 }
