@@ -304,7 +304,7 @@ public interface PivotDataSource<T> extends Serializable {
      * A simple type containing filter information set by the user.
      */
     final class PivotFilter implements Serializable {
-        private final Map<String, Object> filterValues = new HashMap<>();
+        private final Map<String, Set<Object>> filterValues = new HashMap<>();
 
         /**
          * Return a map with set filter values. The map key represents the column key, that can be obtained by
@@ -314,7 +314,7 @@ public interface PivotDataSource<T> extends Serializable {
          * Returns always a map, never null.
          * @return filter values map.
          */
-        public Map<String, Object> getFilterValues() {
+        public Map<String, Set<Object>> getFilterValues() {
             return filterValues;
         }
 

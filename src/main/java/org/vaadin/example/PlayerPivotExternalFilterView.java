@@ -2,8 +2,6 @@ package org.vaadin.example;
 
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.FooterRow;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.Column;
@@ -12,15 +10,14 @@ import com.vaadin.flow.component.grid.GridSortOrder;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.grid.HeaderRow;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.PWA;
 import org.jetbrains.annotations.NotNull;
 import org.vaadin.example.pivot.datasource.PivotDataSource;
 import org.vaadin.example.pivot.datasource.PivotDataSource.Row;
 import org.vaadin.example.pivot.ui.PivotConfigurationPanel;
+import org.vaadin.gatanaso.MultiselectComboBox;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -182,7 +179,7 @@ public class PlayerPivotExternalFilterView extends VerticalLayout {
 		for (Column<Row<T>> column : pivotTable.getColumns()) {
 			PivotDataSource.PivotColumn<T> pivotColumn = pivotResult.getColumn(column.getKey());
 			if (pivotColumn.isFilterEnabled()) {
-				ComboBox<Object> filterField = new ComboBox<>(); // replace with select and a button?
+				MultiselectComboBox<Object> filterField = new MultiselectComboBox<>(); // replace with select and a button?
 				filterField.setClearButtonVisible(true);
 				filterField.setWidthFull();
 				filterField.setMinWidth("75px");
@@ -213,7 +210,7 @@ public class PlayerPivotExternalFilterView extends VerticalLayout {
 						PivotDataSource.PivotResult<T> filteredPivotResult = panel.computePivotData(items);
 						pivotTable.setItems(filteredPivotResult.rows);
 
-						updateExternalFilters(filterComponent, panel, items, pivotTable, filteredPivotResult);
+						updateExternalFilters(filterComponent, panel, items, pivotTable, pivotResult);
 						updateGrandTotalFooter(pivotTable, filteredPivotResult);
 					}
 				});
