@@ -267,11 +267,19 @@ public class PivotConfigurationPanel<T> extends Composite<Div> {
         filterValues.remove(columnId);
     }
 
+    public void removeFilterValues() {
+        filter.getFilterValues().clear();
+    }
+
     public Set<Object> getFilterValue(PivotColumn<?> column) {
         return getFilterValue(column.id);
     }
 
     public Set<Object> getFilterValue(String columndId) {
         return filter.getFilterValues().get(columndId);
+    }
+
+    public Map<String, Set<Object>> getFilterValues() {
+        return new HashMap<>(filter.getFilterValues());
     }
 }

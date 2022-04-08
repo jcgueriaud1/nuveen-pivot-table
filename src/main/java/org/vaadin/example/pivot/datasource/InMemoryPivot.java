@@ -117,7 +117,7 @@ public class InMemoryPivot<T> implements PivotDataSource<T> {
                     for (Entry<String, Set<Object>> filterValue : filterValues) {
                         String columnId = filterValue.getKey();
                         Set<Object> value = filterValue.getValue();
-                        if (!value.contains(row.get(columnId))) {
+                        if (!value.isEmpty() && !value.contains(row.get(columnId))) {
                             return false;
                         }
                     }

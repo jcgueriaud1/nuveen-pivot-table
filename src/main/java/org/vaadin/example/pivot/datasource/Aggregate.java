@@ -55,9 +55,6 @@ public final class Aggregate<T> implements Serializable {
      */
     @NotNull
     public Number computeAggregatedValue(@NotNull Collection<T> groupedItems) {
-        if (groupedItems.isEmpty()) {
-            throw new IllegalArgumentException("Parameter groupedItems: invalid value " + groupedItems + ": empty");
-        }
         final Stream<?> numericValues = groupedItems.stream()
                 .map(property.valueProvider);
         return function.compute(numericValues);

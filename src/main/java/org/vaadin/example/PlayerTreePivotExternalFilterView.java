@@ -2,7 +2,6 @@ package org.vaadin.example;
 
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.FooterRow;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.Column;
@@ -24,7 +23,6 @@ import org.vaadin.example.pivot.ui.PivotConfigurationPanel;
 import org.vaadin.gatanaso.MultiselectComboBox;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -33,9 +31,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.mapping;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -176,7 +172,16 @@ public class PlayerTreePivotExternalFilterView extends VerticalLayout {
 		}
 
 		if (pivotResult.hasEnabledFilters()) {
-			updateExternalFilters(filterComponent, panel, items, pivotTable, pivotResult);
+			Map<String, Set<Object>> filterValues = panel.getFilterValues();
+			panel.removeFilterValues();
+			final PivotDataSource.PivotResult<T> unfilteredPivotResult = panel.computePivotData(items);
+			filterValues.forEach( (key, value) -> {
+				pivotResult.getColumn(key);
+				if (pivotResult.getColumn(key).isFilterEnabled()) {
+					panel.setFilterValue(key, value);
+				}
+			});
+			updateExternalFilters(filterComponent, panel, items, pivotTable, unfilteredPivotResult);
 		}
 
 		updateGrandTotalFooter(pivotTable, pivotResult);
@@ -332,7 +337,7 @@ public class PlayerTreePivotExternalFilterView extends VerticalLayout {
 						TreeData<Row<T>> data = buildTreeData(filteredPivotResult);
 						pivotTable.setTreeData(data);
 
-						updateExternalFilters(filterComponent, panel, items, pivotTable, filteredPivotResult);
+						updateExternalFilters(filterComponent, panel, items, pivotTable, pivotResult);
 						updateGrandTotalFooter(pivotTable, filteredPivotResult);
 					}
 				});

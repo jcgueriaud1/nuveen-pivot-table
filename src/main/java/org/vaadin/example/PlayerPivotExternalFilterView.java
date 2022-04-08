@@ -2,8 +2,6 @@ package org.vaadin.example;
 
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.FooterRow;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.Column;
@@ -12,11 +10,9 @@ import com.vaadin.flow.component.grid.GridSortOrder;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.grid.HeaderRow;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.PWA;
 import org.jetbrains.annotations.NotNull;
 import org.vaadin.example.pivot.datasource.PivotDataSource;
 import org.vaadin.example.pivot.datasource.PivotDataSource.Row;
@@ -214,7 +210,7 @@ public class PlayerPivotExternalFilterView extends VerticalLayout {
 						PivotDataSource.PivotResult<T> filteredPivotResult = panel.computePivotData(items);
 						pivotTable.setItems(filteredPivotResult.rows);
 
-						updateExternalFilters(filterComponent, panel, items, pivotTable, filteredPivotResult);
+						updateExternalFilters(filterComponent, panel, items, pivotTable, pivotResult);
 						updateGrandTotalFooter(pivotTable, filteredPivotResult);
 					}
 				});
