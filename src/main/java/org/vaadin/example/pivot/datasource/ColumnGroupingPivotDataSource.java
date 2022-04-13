@@ -164,9 +164,9 @@ public class ColumnGroupingPivotDataSource<T> implements PivotDataSource<T> {
             Map<String, Set<Object>> values = filters.getFilterValues();
 
             for (Map.Entry<String, Set<Object>> entry : values.entrySet()) {
-                System.out.println("Test Objects.equals(" + entry.getValue() + "," + finalNewRow.get(entry.getKey()) + ": "
-                        + (Objects.equals(entry.getValue(), finalNewRow.get(entry.getKey())) ? "allow" : "filter out"));
-                if (!entry.getValue().contains(finalNewRow.get(entry.getKey()))) {
+                /*System.out.println("Test Objects.equals(" + entry.getValue() + "," + finalNewRow.get(entry.getKey()) + ": "
+                        + (Objects.equals(entry.getValue(), finalNewRow.get(entry.getKey())) ? "allow" : "filter out"));*/
+                if (!entry.getValue().isEmpty() && !entry.getValue().contains(finalNewRow.get(entry.getKey()))) {
                     continue buildFinalRows;
                 }
             }
